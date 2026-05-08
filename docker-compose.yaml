@@ -27,7 +27,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
-
+      
   open-tutor-frontend:
     build:
       context: .
@@ -37,19 +37,43 @@ services:
       - "5173:5173"
     working_dir: /app
     volumes:
-      - ./src:/app/src
-      - ./static:/app/static
-      - ./vite.config.js:/app/vite.config.js
-      - ./svelte.config.js:/app/svelte.config.js
-      - ./package.json:/app/package.json
-      - ./package-lock.json:/app/package-lock.json
-      - ./.env:/app/.env
+      - .:/app
+      - /app/node_modules
     environment:
       - VITE_API_URL=http://open-tutor-backend:8080
       - NODE_ENV=development
-    command: npm run dev
+    command: npm run dev -- --host 0.0.0.0
     depends_on:
       open-tutor-backend:
         condition: service_healthy
     networks:
       - app-network
+
+  # open-tutor-frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.frontend
+  #   container_name: open-tutor-frontend
+  #   ports:
+  #     - "5173:5173"
+  #   working_dir: /app
+  #   volumes:
+  #     - ./src:/app/src
+  #     - ./static:/app/static
+  #     - ./vite.config.js:/app/vite.config.js
+  #     - ./svelte.config.js:/app/svelte.config.js
+  #     - ./package.json:/app/package.json
+  #     - ./package-lock.json:/app/package-lock.json
+  #     - ./.env:/app/.env
+  #   environment:
+  #     - VITE_API_URL=http://open-tutor-backend:8080
+  #     - NODE_ENV=development
+  #   command: npm run dev
+  #   depends_on:
+  #     open-tutor-backend:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
+
+
+  

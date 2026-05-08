@@ -2,5 +2,5 @@
 <script lang="ts">
 	import Dashboard from '$lib/components/student/pages/Dashboard.svelte';
 </script>
-
+a
 <Dashboard />
