@@ -455,25 +455,7 @@
 		}
 	}
 
-	// File upload handling
-	function handleFileChange(event: Event) {
-		const files = (event.target as HTMLInputElement).files;
-		if (files && files.length > 0) {
-			uploadedFiles = Array.from(files);
-		}
-	}
-
-	function handleFileDrop(event: DragEvent) {
-		event.preventDefault();
-		if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
-			uploadedFiles = Array.from(event.dataTransfer.files);
-		}
-	}
-
-	function preventDefaults(event: Event) {
-		event.preventDefault();
-		event.stopPropagation();
-	}
+	
 
 	// Save support data to database
 	async function saveSupportToDatabase() {
@@ -911,7 +893,7 @@
 						</div>
 					</div>
 				{:else if currentStep === 1}
-							<FileUploadManager />
+							<FileUploadManager bind:uploadedFiles={uploadedFiles} />
 				{:else if currentStep === 2}
 						<!-- Objectives step - Enhanced UI -->
 						<div class="space-y-8 step-content-enter">
