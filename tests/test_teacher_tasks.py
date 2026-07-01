@@ -4,7 +4,8 @@
 
 def _signup(client, email="teacher@test.com"):
     r = client.post(
-        "/auths/signup", json={"email": email, "name": "Teacher", "password": "pass1234!"}
+        "/auths/signup",
+        json={"email": email, "name": "Teacher", "password": "pass1234!"},
     )
     assert r.status_code == 200
     return r.json()["token"]
@@ -19,7 +20,11 @@ class TestCrud:
         token = _signup(client)
         r = client.post(
             "/api/v1/teacher-tasks",
-            json={"title": "Grade quizzes", "priority": "high", "category": "assessment"},
+            json={
+                "title": "Grade quizzes",
+                "priority": "high",
+                "category": "assessment",
+            },
             headers=_auth(token),
         )
         assert r.status_code == 200
@@ -40,7 +45,9 @@ class TestCrud:
     def test_create_defaults(self, client):
         token = _signup(client, "defaults@test.com")
         r = client.post(
-            "/api/v1/teacher-tasks", json={"title": "Untitled defaults"}, headers=_auth(token)
+            "/api/v1/teacher-tasks",
+            json={"title": "Untitled defaults"},
+            headers=_auth(token),
         )
         assert r.status_code == 200
         data = r.json()
@@ -139,7 +146,9 @@ class TestOwnership:
         token_a = _signup(client, "owna@test.com")
         token_b = _signup(client, "ownb@test.com")
         task_id = client.post(
-            "/api/v1/teacher-tasks", json={"title": "Private task"}, headers=_auth(token_a)
+            "/api/v1/teacher-tasks",
+            json={"title": "Private task"},
+            headers=_auth(token_a),
         ).json()["id"]
 
         r = client.get(f"/api/v1/teacher-tasks/{task_id}", headers=_auth(token_b))
@@ -149,7 +158,9 @@ class TestOwnership:
         token_a = _signup(client, "owna2@test.com")
         token_b = _signup(client, "ownb2@test.com")
         task_id = client.post(
-            "/api/v1/teacher-tasks", json={"title": "Private task"}, headers=_auth(token_a)
+            "/api/v1/teacher-tasks",
+            json={"title": "Private task"},
+            headers=_auth(token_a),
         ).json()["id"]
 
         r = client.patch(
@@ -163,7 +174,9 @@ class TestOwnership:
         token_a = _signup(client, "owna3@test.com")
         token_b = _signup(client, "ownb3@test.com")
         task_id = client.post(
-            "/api/v1/teacher-tasks", json={"title": "Private task"}, headers=_auth(token_a)
+            "/api/v1/teacher-tasks",
+            json={"title": "Private task"},
+            headers=_auth(token_a),
         ).json()["id"]
 
         r = client.delete(f"/api/v1/teacher-tasks/{task_id}", headers=_auth(token_b))
@@ -172,8 +185,12 @@ class TestOwnership:
     def test_list_only_shows_own_tasks(self, client):
         token_a = _signup(client, "lista@test.com")
         token_b = _signup(client, "listb@test.com")
-        client.post("/api/v1/teacher-tasks", json={"title": "A's task"}, headers=_auth(token_a))
-        client.post("/api/v1/teacher-tasks", json={"title": "B's task"}, headers=_auth(token_b))
+        client.post(
+            "/api/v1/teacher-tasks", json={"title": "A's task"}, headers=_auth(token_a)
+        )
+        client.post(
+            "/api/v1/teacher-tasks", json={"title": "B's task"}, headers=_auth(token_b)
+        )
 
         r = client.get("/api/v1/teacher-tasks", headers=_auth(token_a))
         assert len(r.json()) == 1
@@ -184,10 +201,14 @@ class TestQuickComplete:
     def test_complete_and_reopen_task(self, client):
         token = _signup(client, "complete@test.com")
         task_id = client.post(
-            "/api/v1/teacher-tasks", json={"title": "Parent meeting"}, headers=_auth(token)
+            "/api/v1/teacher-tasks",
+            json={"title": "Parent meeting"},
+            headers=_auth(token),
         ).json()["id"]
 
-        r = client.post(f"/api/v1/teacher-tasks/{task_id}/complete", headers=_auth(token))
+        r = client.post(
+            f"/api/v1/teacher-tasks/{task_id}/complete", headers=_auth(token)
+        )
         assert r.status_code == 200
         assert r.json()["status"] == "completed"
 
@@ -219,17 +240,29 @@ class TestSearchFilterSort:
     def _seed(self, client, token):
         client.post(
             "/api/v1/teacher-tasks",
-            json={"title": "Grade essays", "priority": "high", "category": "assessment"},
+            json={
+                "title": "Grade essays",
+                "priority": "high",
+                "category": "assessment",
+            },
             headers=_auth(token),
         )
         client.post(
             "/api/v1/teacher-tasks",
-            json={"title": "Book field trip", "priority": "low", "category": "administration"},
+            json={
+                "title": "Book field trip",
+                "priority": "low",
+                "category": "administration",
+            },
             headers=_auth(token),
         )
         client.post(
             "/api/v1/teacher-tasks",
-            json={"title": "Grade homework", "priority": "urgent", "category": "assessment"},
+            json={
+                "title": "Grade homework",
+                "priority": "urgent",
+                "category": "assessment",
+            },
             headers=_auth(token),
         )
 
@@ -245,7 +278,9 @@ class TestSearchFilterSort:
     def test_filter_by_status(self, client):
         token = _signup(client, "filterstatus@test.com")
         self._seed(client, token)
-        task_id = client.get("/api/v1/teacher-tasks", headers=_auth(token)).json()[0]["id"]
+        task_id = client.get("/api/v1/teacher-tasks", headers=_auth(token)).json()[0][
+            "id"
+        ]
         client.post(f"/api/v1/teacher-tasks/{task_id}/complete", headers=_auth(token))
 
         r = client.get("/api/v1/teacher-tasks?status=completed", headers=_auth(token))
@@ -265,7 +300,9 @@ class TestSearchFilterSort:
         token = _signup(client, "filtercategory@test.com")
         self._seed(client, token)
 
-        r = client.get("/api/v1/teacher-tasks?category=assessment", headers=_auth(token))
+        r = client.get(
+            "/api/v1/teacher-tasks?category=assessment", headers=_auth(token)
+        )
         assert len(r.json()) == 2
 
     def test_sort_by_priority(self, client):

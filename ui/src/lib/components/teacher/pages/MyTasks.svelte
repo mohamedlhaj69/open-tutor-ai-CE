@@ -257,7 +257,9 @@
 		</div>
 	{/if}
 
-	<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm ring-1 ring-gray-100 dark:ring-gray-700 p-4 mb-6">
+	<div
+		class="bg-white dark:bg-gray-800 rounded-xl shadow-sm ring-1 ring-gray-100 dark:ring-gray-700 p-4 mb-6"
+	>
 		<div class="flex flex-col lg:flex-row gap-3">
 			<div class="flex-1">
 				<label for="task-search" class="sr-only">{$i18n.t('Search by title')}</label>
@@ -343,9 +345,7 @@
 						'completed'
 							? 'bg-emerald-500 border-emerald-500 text-white'
 							: 'border-gray-300 dark:border-gray-600 hover:border-emerald-500 text-transparent'}"
-						title={task.status === 'completed'
-							? $i18n.t('Mark as To Do')
-							: $i18n.t('Mark as Done')}
+						title={task.status === 'completed' ? $i18n.t('Mark as To Do') : $i18n.t('Mark as Done')}
 						aria-label={task.status === 'completed'
 							? $i18n.t('Mark as To Do')
 							: $i18n.t('Mark as Done')}

@@ -91,7 +91,9 @@ def list_tasks(
 
 @router.post("", response_model=TeacherTaskResponse)
 def create_task(
-    data: TeacherTaskCreateRequest, current_user: CurrentUserDep, svc: TeacherTaskServiceDep
+    data: TeacherTaskCreateRequest,
+    current_user: CurrentUserDep,
+    svc: TeacherTaskServiceDep,
 ):
     return svc.create(current_user.id, data.model_dump())
 
@@ -127,7 +129,9 @@ def delete_task(task_id: str, current_user: CurrentUserDep, svc: TeacherTaskServ
 
 
 @router.post("/{task_id}/complete", response_model=TeacherTaskResponse)
-def complete_task(task_id: str, current_user: CurrentUserDep, svc: TeacherTaskServiceDep):
+def complete_task(
+    task_id: str, current_user: CurrentUserDep, svc: TeacherTaskServiceDep
+):
     try:
         return svc.set_status(current_user.id, task_id, "completed")
     except (NotFoundError, AuthorizationError) as exc:
