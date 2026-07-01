@@ -9,6 +9,7 @@
 	import Classroom from '$lib/components/icons/Classroom.svelte';
 	import Assignment from '$lib/components/icons/Assignment.svelte';
 	import Message from '$lib/components/icons/Messages.svelte';
+	import Clipboard from '$lib/components/icons/Clipboard.svelte';
 	import type { ComponentType } from 'svelte';
 	import { writable, type Writable } from 'svelte/store';
 	const i18n = getContext('i18n');
@@ -158,7 +159,7 @@
 			{ id: 'messages', label: 'Messages', icon: Message },
 			{ id: 'settings', label: 'Profile & Settings', icon: Settings }
 		],
-		teacher: [],
+		teacher: [{ id: 'my-tasks', label: 'My Tasks', icon: Clipboard }],
 		parent: []
 	};
 </script>
