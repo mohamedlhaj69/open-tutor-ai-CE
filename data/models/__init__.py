@@ -5,6 +5,7 @@ from .file import FileRecord
 from .knowledge import KnowledgeBase, KnowledgeFile
 from .model import ModelConfig
 from .support import Support, SupportFile
+from .teacher_task import TeacherTask
 from .user import User
 
 __all__ = [
@@ -18,4 +19,5 @@ __all__ = [
     "AppConfig",
     "KnowledgeBase",
     "KnowledgeFile",
+    "TeacherTask",
 ]
